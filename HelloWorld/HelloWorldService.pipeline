@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:pipelineEntry xmlns:con="http://www.bea.com/wli/sb/pipeline/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <con:coreEntry>
+        <con:binding type="SOAP" isSoap12="false" xsi:type="con:SoapBindingType">
+            <con:wsdl ref="HelloWorld/Resources/HelloWorldService"/>
+            <con:binding>
+                <con:name>HelloWorldService_ptt-binding</con:name>
+                <con:namespace>http://xmlns.oracle.com/Jenkins-Maven/HelloWorld/HelloWorldService</con:namespace>
+            </con:binding>
+        </con:binding>
+        <con:xqConfiguration>
+            <con:snippetVersion>1.0</con:snippetVersion>
+        </con:xqConfiguration>
+    </con:coreEntry>
+    <con:router>
+        <con:pipeline type="request" name="request-N3f57e264.N29df1546.0.193626fcf25.N8000">
+            <con:stage id="_StageId-N3f57e264.N29df1546.0.193626fcf25.N7ffe" name="HelloWorld_Request">
+                <con:context/>
+                <con:actions/>
+            </con:stage>
+        </con:pipeline>
+        <con:pipeline type="response" name="response-N3f57e264.N29df1546.0.193626fcf25.N7fff">
+            <con:stage id="_StageId-N3f57e264.N29df1546.0.193626fcf25.N7ffd" name="HelloWorld_Response">
+                <con:context>
+                    <con1:userNsDecl prefix="hel" namespace="http://TargetNamespace.com/HelloWorld" xmlns:con1="http://www.bea.com/wli/sb/stages/config"/>
+                </con:context>
+                <con:actions>
+                    <con1:replace varName="body" contents-only="true" xmlns:con1="http://www.bea.com/wli/sb/stages/transform/config">
+                        <con2:id xmlns:con2="http://www.bea.com/wli/sb/stages/config">_ActionId-N3f57e264.N29df1546.0.193626fcf25.N7ffa</con2:id>
+                        <con1:expr>
+                            <con2:xqueryText xmlns:con2="http://www.bea.com/wli/sb/stages/config">&lt;HelloWorld_Response xmlns="http://TargetNamespace.com/HelloWorld">
+   &lt;Output>{fn:concat('Hello - ',$body/hel:HelloWorld_Request/hel:Input)}&lt;/Output>
+&lt;/HelloWorld_Response></con2:xqueryText>
+                        </con1:expr>
+                    </con1:replace>
+                </con:actions>
+            </con:stage>
+        </con:pipeline>
+        <con:flow>
+            <con:pipeline-node name="Pipeline Pair Node1">
+                <con:request>request-N3f57e264.N29df1546.0.193626fcf25.N8000</con:request>
+                <con:response>response-N3f57e264.N29df1546.0.193626fcf25.N7fff</con:response>
+            </con:pipeline-node>
+        </con:flow>
+    </con:router>
+</con:pipelineEntry>
